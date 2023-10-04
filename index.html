@@ -47,6 +47,7 @@
     }
     
     function getDashboard(){
+        history.pushState(null, null, '/dashboard');
         const token = localStorage.getItem('jwt');
         axios.get('/api/dashboard',{headers:{
             'Authorization' : `Bearer ${token}` 
@@ -61,7 +62,7 @@
         });
     }
     function getSettings(){
-        history.pushState(null, null, '/api/settings');
+        history.pushState(null, null, '/settings');
         const token = localStorage.getItem('jwt');
         axios.get('/api/settings',{headers:{
             'Authorization' : `Bearer ${token}` 
@@ -75,6 +76,17 @@
 
         });
     }
+    
+    function checkTokenExpiration() {
+        const token = localStorage.getItem('jwt');
+        const decodedToken = jwt_decode(token);
+        const currentTime = Date.now() / 1000;
+
+        if (decodedToken.exp < currentTime) {
+            window.location.href = '/';
+        }
+    }
+    checkTokenExpiration();
 </script>
 </body>
 </html>
